@@ -33,10 +33,6 @@
         body,h3 {
             color: white;
         }
-
-        .alert-danger,.alert-info {
-            color: black;
-        }
     </style>
 </head>
 <body>
@@ -44,29 +40,7 @@
 <div class="container" th:fragment="content">
 
     <div class="card transparentCard">
-        <!--<h3 class="card-title">Login</h3>-->
-
-        <form action="/login" method="post">
-            <div class="form-control">
-                <label>Username</label>
-                <input type="text" name="username" placeholder="username"/>
-            </div>
-
-            <div class="form-control">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="password"/>
-            </div>
-
-            <ul class="card-actions">
-                <li><input type="submit" class="button-default" value="Login"/></li>
-            </ul>
-
-            <input type="hidden" th:attr="name=${_csrf.parameterName},value=${_csrf.token}" />
-        </form>
-
-        <p class="alert alert-danger" th:if="${param.error}">Error logging in.  Please try again.</p>
-        <p class="alert alert-info" th:if="${param.logout}">You have been logged out.</p>
-
+        <h3 class="card-title">Oh no!  Something went wrong!</h3>
     </div>
 </div>
 </body>

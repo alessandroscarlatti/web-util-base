@@ -44,4 +44,10 @@ public class DemoController {
 
         return "default";
     }
+
+    @GetMapping("/error")
+    public String error(Map<String, Object> model) {
+        model.put("view", "error");
+        return "default";
+    }
 }
