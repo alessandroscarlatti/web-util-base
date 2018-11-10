@@ -29,4 +29,18 @@ public class DemoController {
 
         return "index";
     }
+
+    @GetMapping("/login")
+    public String login(Map<String, Object> model) {
+        model.put("view", "login");
+
+        return "default";
+    }
+
+    @GetMapping("/secret")
+    public String secret(Map<String, Object> model) {
+        model.put("view", "secret");
+
+        return "default";
+    }
 }

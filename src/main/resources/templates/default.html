@@ -9,9 +9,6 @@
             height: 100%;
             margin: 0;
         }
-        body,h3 {
-            color: white;
-        }
 
         .bg {
             position: fixed;
@@ -21,30 +18,11 @@
             background: url(https://icdn3.digitaltrends.com/image/50395182-infinite-space-background-with-silhouette-of-telescope.jpg?ver=1) no-repeat center;
             background-size: cover;
         }
-
-        .transparentCard {
-            background-color: initial;
-            border: none;
-            box-shadow: none;
-        }
     </style>
+    <style th:replace="${view} :: styles"></style>
 </head>
 <body>
 <div class="bg"></div>
-<div class="container">
-<div>
-    <div class="card transparentCard">
-        <h3 class="card-title">Tasks</h3>
-
-        <div><p>Run these tasks to do cool things.</p></div>
-        <div><p th:text="${motd}"></p></div>
-
-        <div><button class="button-default-outlined button-round" >Task 1</button></div>
-        <div><button class="button-default-outlined button-round" >Task 2</button></div>
-        <div><button class="button-default-outlined button-round" >Task 3</button></div>
-
-    </div>
-</div>
-</div>
+<div th:replace="${view} :: content">Page Content</div>
 </body>
 </html>
