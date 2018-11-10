@@ -4,38 +4,26 @@
     <title>Basic Single Page App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://unpkg.com/mustard-ui@latest/dist/css/mustard-ui.min.css" />
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-        }
-        body,h3 {
-            color: white;
-        }
-
-        .bg {
-            position: fixed;
-            height: 100%;
-            width: 100%;
-            z-index: -1;
-            background: url(https://icdn3.digitaltrends.com/image/50395182-infinite-space-background-with-silhouette-of-telescope.jpg?ver=1) no-repeat center;
-            background-size: cover;
-        }
-
+    <style th:fragment="styles">
         .transparentCard {
             background-color: initial;
             border: none;
             box-shadow: none;
         }
+
+        body,h3 {
+            color: white;
+        }
     </style>
 </head>
 <body>
 <div class="bg"></div>
-<div class="container">
+<div class="container" th:fragment="content">
 <div>
     <div class="card transparentCard">
-        <h3 class="card-title">Tasks</h3>
+        <h3 class="card-title">Public</h3>
 
+        <div><p>You can see this whether or not you are logged in.</p></div>
         <div><p>Run these tasks to do cool things.</p></div>
         <div><p th:text="${motd}"></p></div>
 

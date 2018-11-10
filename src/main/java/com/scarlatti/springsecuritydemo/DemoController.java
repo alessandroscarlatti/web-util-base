@@ -26,8 +26,9 @@ public class DemoController {
         }
 
         model.put("motd",  motd);
+        model.put("view", "index");
 
-        return "index";
+        return "default";
     }
 
     @GetMapping("/login")
