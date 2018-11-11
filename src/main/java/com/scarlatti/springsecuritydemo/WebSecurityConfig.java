@@ -1,10 +1,14 @@
 package com.scarlatti.springsecuritydemo;
 
+import org.springframework.boot.web.servlet.ErrorPage;
+import org.springframework.boot.web.servlet.ErrorPageRegistrar;
+import org.springframework.boot.web.servlet.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,16 +29,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/logout").permitAll()
-                .anyRequest().authenticated()
-                .and()
+            .antMatchers("/").permitAll()
+            .antMatchers("/error").permitAll()
+            .antMatchers("/resources/**").permitAll()
+            .antMatchers("/secret").hasRole("USER")
+            .antMatchers("/admin").hasRole("ADMIN")
+            .anyRequest().authenticated();
+
+        http
             .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
+            .loginPage("/login")
+            .failureUrl("/error")
+            .permitAll();
+
+        http
             .logout()
-                .permitAll();
+            .permitAll();
     }
 
     @Bean  // this must be a bean
@@ -46,6 +56,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(user);
+        UserDetails admin = User.withUsername("admin")
+            .password("admin")
+            .roles("USER", "ADMIN")
+            .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
     }
 }

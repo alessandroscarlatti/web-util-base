@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Basic Single Page App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -26,18 +26,15 @@
 <div class="container" th:fragment="content">
 
     <div class="card transparentCard">
-        <h3 class="card-title">Secret Content</h3>
+        <h3 class="card-title">Admin Content</h3>
 
         <div>
-            <p>If you can see this, you are logged in.</p>
+            <p>If you can see this, you are an admin.</p>
         </div>
         <form action="/logout" method="post">
             <input type="submit" class="button-default" value="Logout" />
             <input type="hidden" th:attr="name=${_csrf.parameterName},value=${_csrf.token}" />
         </form>
-        <div sec:authorize="hasAuthority('ROLE_ADMIN')">
-            <p>If you can see this, you are an admin.</p>
-        </div>
 
     </div>
 </div>

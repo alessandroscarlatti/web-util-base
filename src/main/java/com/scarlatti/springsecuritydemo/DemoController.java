@@ -1,5 +1,6 @@
 package com.scarlatti.springsecuritydemo;
 
+import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +15,7 @@ import java.util.Map;
  * Saturday, 11/10/2018
  */
 @Controller
-public class DemoController {
+public class DemoController implements ErrorController {
 
 
     @GetMapping("/")
@@ -45,9 +46,21 @@ public class DemoController {
         return "default";
     }
 
+    @GetMapping("/admin")
+    public String admin(Map<String, Object> model) {
+        model.put("view", "admin");
+
+        return "default";
+    }
+
     @GetMapping("/error")
     public String error(Map<String, Object> model) {
         model.put("view", "error");
         return "default";
+    }
+
+    @Override
+    public String getErrorPath() {
+        return "/__dummy_error";
     }
 }

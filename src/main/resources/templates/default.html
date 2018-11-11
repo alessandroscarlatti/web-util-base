@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>Basic Single Page App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/png" href="/resources/favicon.png" />
     <link rel="stylesheet" href="https://unpkg.com/mustard-ui@latest/dist/css/mustard-ui.min.css" />
     <style>
         body, html {
@@ -23,6 +24,8 @@
 </head>
 <body>
 <div class="bg"></div>
+<div th:if="${#authentication}" th:text="${#authentication.name}"></div>
+<div th:if="${#authentication}" th:text="${#authentication.authorities}"></div>
 <div th:replace="${view} :: content">Page Content</div>
 </body>
 </html>
