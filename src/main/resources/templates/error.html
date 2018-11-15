@@ -42,6 +42,8 @@
 
     <div class="card transparentCard">
         <h3 class="card-title">Oh no!  Something went wrong!</h3>
+        <div th:text="${#vars.get('javax.servlet.error.status_code')}"></div>
+        <div th:text="${#vars.get('javax.servlet.error.message')}"></div>
     </div>
 </div>
 </body>

@@ -1,18 +1,12 @@
 package com.scarlatti.springsecuritydemo;
 
-import org.springframework.boot.web.servlet.ErrorPage;
-import org.springframework.boot.web.servlet.ErrorPageRegistrar;
-import org.springframework.boot.web.servlet.ErrorPageRegistry;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
  * ______    __                         __           ____             __     __  __  _
@@ -24,6 +18,19 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private UserDetailsService userDetailsService;
+
+    public WebSecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        auth.authenticationProvider(authProvider);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -47,20 +54,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll();
     }
 
-    @Bean  // this must be a bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        UserDetails user =
-            User.withUsername("guest")
-                .password("guest")
-                .roles("USER")
-                .build();
-
-        UserDetails admin = User.withUsername("admin")
-            .password("admin")
-            .roles("USER", "ADMIN")
-            .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
-    }
+//    @Bean  // this must be a bean
+//    @Override
+//    protected UserDetailsService userDetailsService() {
+//        UserDetails user =
+//            User.withUsername("guest")
+//                .password("guest")
+//                .roles("USER")
+//                .build();
+//
+//        UserDetails admin = User.withUsername("admin")
+//            .password("admin")
+//            .roles("USER", "ADMIN")
+//            .build();
+//
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
 }

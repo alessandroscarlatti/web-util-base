@@ -3,3 +3,9 @@ logging:
     org.springframework: DEBUG
 
 security.filter-dispatcher-types: ASYNC, FORWARD, INCLUDE, REQUEST, ERROR # this is necessary due to some bug in actuator that puts /error in a different filter chain.
+
+spring:
+  datasource:
+    url: jdbc:h2:file:./build/datasource;AUTO_SERVER=true
+    username: sa
+    password:
