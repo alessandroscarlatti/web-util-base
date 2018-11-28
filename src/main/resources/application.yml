@@ -9,3 +9,7 @@ spring:
     url: jdbc:h2:file:./build/datasource;AUTO_SERVER=true
     username: sa
     password:
+  ldap:
+    embedded:
+      port: 8389
+      base-dn: dc=springframework,dc=org
