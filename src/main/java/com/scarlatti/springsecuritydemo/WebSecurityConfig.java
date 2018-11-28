@@ -48,29 +48,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 ////              .authoritiesByUsernameQuery("select username,role from user_roles where username = ?");
 
         // embedded ldap server
-//        auth.ldapAuthentication()
-//            .userDnPatterns("uid={0},ou=people")  // "list users by username"
-//            .groupSearchBase("ou=groups")  // the "groups" will be translated to ROLE_group1, ROLE_group2, etc.
-//            .contextSource()
-//                .url("ldap://localhost:8389/dc=springframework,dc=org")  // database url
-//                .and()
-//            .passwordCompare()
-//                .passwordEncoder(new PlaintextPasswordEncoder())  // everybody BUT ben works
-////                .passwordEncoder(new LdapShaPasswordEncoder())  // ben works (because his password is hashed)
-//                .passwordAttribute("userPassword");
+        auth.ldapAuthentication()
+            .userDnPatterns("uid={0},ou=people")  // "list users by username"
+            .groupSearchBase("ou=groups")  // the "groups" will be translated to ROLE_group1, ROLE_group2, etc.
+            .contextSource()
+                .url("ldap://localhost:8389/dc=springframework,dc=org")  // database url
+                .and()
+            .passwordCompare()
+                .passwordEncoder(new PlaintextPasswordEncoder())  // everybody BUT ben works
+//                .passwordEncoder(new LdapShaPasswordEncoder())  // ben works (because his password is hashed)
+                .passwordAttribute("userPassword");
 
         // local docker server using classpath:schema2.ldif
-
-        auth.ldapAuthentication()
-            .userDnPatterns("uid={0},ou=people")
-            .groupSearchBase("ou=groups")
-            .contextSource().url("ldap://docker:389/dc=example,dc=org")
-            .managerDn("cn=admin,dc=example,dc=org") // need these credentials since the database requires a password to view anything.
-            .managerPassword("admin")
-            .and()
-            .passwordCompare()
-                .passwordEncoder(new PlaintextPasswordEncoder())
-                .passwordAttribute("userPassword");
+//        auth.ldapAuthentication()
+//            .userDnPatterns("uid={0},ou=people")
+//            .groupSearchBase("ou=groups")
+//            .contextSource().url("ldap://docker:389/dc=example,dc=org")
+//            .managerDn("cn=admin,dc=example,dc=org") // need these credentials since the database requires a password to view anything.
+//            .managerPassword("admin")
+//            .and()
+//            .passwordCompare()
+//                .passwordEncoder(new PlaintextPasswordEncoder())
+//                .passwordAttribute("userPassword");
     }
 
     @Override
