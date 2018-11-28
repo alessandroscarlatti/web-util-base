@@ -1,0 +1,9 @@
+version: '3'
+services:
+  pureftpd:
+    image: "osixia/openldap:1.2.2"
+    ports:
+      - "389:389"
+      - "689:689"
+#    volumes:
+#      - "C:\\Users\\pc\\Desktop\\LdapServer:/pc"
