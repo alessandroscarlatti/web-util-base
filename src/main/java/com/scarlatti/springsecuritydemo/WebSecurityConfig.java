@@ -1,5 +1,7 @@
 package com.scarlatti.springsecuritydemo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.encoding.PlaintextPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -7,8 +9,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 
 /**
  * ______    __                         __           ____             __     __  __  _
@@ -35,10 +44,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        authProvider.setUserDetailsService(userDetailsService);
 //        auth.authenticationProvider(authProvider);
 
-//        auth.inMemoryAuthentication()
-//            .withUser("qwer")
-//            .password("asdf")
-//            .roles("USER");
+        auth.inMemoryAuthentication()
+            .withUser("qwer")
+            .password("asdf")
+            .roles("USER");
 
         // we can just use this for jdbc stuff...
         // the multiple columns are read by spring using an assumed column order.
@@ -48,16 +57,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 ////              .authoritiesByUsernameQuery("select username,role from user_roles where username = ?");
 
         // embedded ldap server
-        auth.ldapAuthentication()
-            .userDnPatterns("uid={0},ou=people")  // "list users by username"
-            .groupSearchBase("ou=groups")  // the "groups" will be translated to ROLE_group1, ROLE_group2, etc.
-            .contextSource()
-                .url("ldap://localhost:8389/dc=springframework,dc=org")  // database url
-                .and()
-            .passwordCompare()
-                .passwordEncoder(new PlaintextPasswordEncoder())  // everybody BUT ben works
-//                .passwordEncoder(new LdapShaPasswordEncoder())  // ben works (because his password is hashed)
-                .passwordAttribute("userPassword");
+//        auth.ldapAuthentication()
+//            .userDnPatterns("uid={0},ou=people")  // "list users by username"
+//            .groupSearchBase("ou=groups")  // the "groups" will be translated to ROLE_group1, ROLE_group2, etc.
+//            .contextSource()
+//            .url("ldap://localhost:8389/dc=springframework,dc=org")  // database url
+//            .and()
+//            .passwordCompare()
+////                .passwordEncoder(new PlaintextPasswordEncoder())  // everybody BUT ben works
+////                .passwordEncoder(new LdapShaPasswordEncoder())  // ben works (because his password is hashed)
+//            .passwordAttribute("userPassword");
+        ;
 
         // local docker server using classpath:schema2.ldif
 //        auth.ldapAuthentication()
@@ -89,8 +99,43 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .loginPage("/login")  // must be specified to make Spring call our page, otherwise, it will generate one on its own, and it won't be as pretty as ours.
             .permitAll();
 
+        http.rememberMe();
+
         http
             .logout()
             .permitAll();
+
+        http.addFilterBefore(new CustomFilter1(), BasicAuthenticationFilter.class);
+        http.addFilterAfter(new CustomFilter2(), BasicAuthenticationFilter.class);
+    }
+
+    public static class CustomFilter1 extends GenericFilterBean {
+
+        private static final Logger log = LoggerFactory.getLogger(CustomFilter1.class);
+
+        @Override
+        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+            log.info("filtering request");
+
+            chain.doFilter(request, response);
+
+            log.info("finished filtering request");
+        }
+    }
+
+    public static class CustomFilter2 extends GenericFilterBean {
+
+        private static final Logger log = LoggerFactory.getLogger(CustomFilter2.class);
+
+        @Override
+        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+            log.info("filtering request");
+
+            chain.doFilter(request, response);
+
+            log.info("finished filtering request");
+        }
     }
 }

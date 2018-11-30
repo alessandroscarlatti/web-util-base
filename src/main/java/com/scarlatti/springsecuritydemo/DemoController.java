@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -25,7 +28,12 @@ public class DemoController implements ErrorController {
 
     @GetMapping("/")
     public String index(@RequestParam(value = "motd", required = false) String motd,
-                        Map<String, Object> model) {
+                        Map<String, Object> model, HttpServletResponse response, HttpServletRequest request) {
+
+        Cookie cookie = new Cookie("test-cookie", "cool-value");
+//        cookie.setDomain(".google.com");
+
+        response.addCookie(cookie);
 
         if (motd == null) {
             motd = "hey hey!";
