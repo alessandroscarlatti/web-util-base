@@ -6,7 +6,7 @@ function doSomethingLong() {
     console.log("csrf parameter", csrfParameterName)
     console.log("csrf token", csrfParameterValue)
 
-    $.post("task1", {
+    $.post("/activities/basicActivity/task1", {
         ttl: "5000",
         [csrfParameterName]: csrfParameterValue
     }).done(function(data, status, xhr) {

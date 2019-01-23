@@ -55,7 +55,7 @@ public class WuController implements ErrorController {
         model.put("motd", motd);
         model.put("view", "index");
 
-        model.put("appName", wuDetails.getName());
+        model.put("app", wuDetails);
 
         model.put("breadcrumb", new WuBreadcrumb(
             new WuCrumb(wuDetails.getName(), "/"),
@@ -70,7 +70,7 @@ public class WuController implements ErrorController {
     public String login(Map<String, Object> model) {
         model.put("view", "login");
 
-        model.put("appName", wuDetails.getName());
+        model.put("app", wuDetails);
 
         return "default";
     }
@@ -78,7 +78,7 @@ public class WuController implements ErrorController {
     @GetMapping("/groups")
     public String groups(Map<String, Object> model) {
         model.put("view", "groups");
-        model.put("appName", wuDetails.getName());
+        model.put("app", wuDetails);
 
         model.put("breadcrumb", new WuBreadcrumb(
             new WuCrumb(wuDetails.getName(), "/"),
@@ -100,7 +100,7 @@ public class WuController implements ErrorController {
     @PostMapping("/groups")
     public String groups(@RequestParam("groupsJson") String groupsJson, Map<String, Object> model) {
         model.put("view", "groups");
-        model.put("appName", wuDetails.getName());
+        model.put("app", wuDetails);
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -118,7 +118,7 @@ public class WuController implements ErrorController {
     @GetMapping("/groups/{groupName}")
     public String group(@PathVariable("groupName") String groupName, Map<String, Object> model) {
         model.put("view", "group");
-        model.put("appName", wuDetails.getName());
+        model.put("app", wuDetails);
 
         model.put("breadcrumb", new WuBreadcrumb(
             new WuCrumb(wuDetails.getName(), "/"),
@@ -141,7 +141,7 @@ public class WuController implements ErrorController {
     @PostMapping("/groups/{groupName}")
     public String updateGroup(@PathVariable("groupName") String groupName, @RequestParam("activitiesJson") String activitiesJson, Map<String, Object> model) {
         model.put("view", "group");
-        model.put("appName", wuDetails.getName());
+        model.put("app", wuDetails);
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -157,7 +157,7 @@ public class WuController implements ErrorController {
     @GetMapping("/activities/{activityName}")
     public String activity(@PathVariable("activityName") String activityName, Map<String, Object> model) {
         model.put("view", "group");
-        model.put("appName", wuDetails.getName());
+        model.put("app", wuDetails);
 
         ActivityController activityController = findActivityController(activityName);
 
@@ -177,23 +177,9 @@ public class WuController implements ErrorController {
         return "default";
     }
 
-    @PostMapping("/task1")
-    public ResponseEntity<String> task1(@RequestParam(value = "ttl", required = false, defaultValue = "3000") String ttl) {
-        try {
-            log.info("beginning task 1");
-            log.info("TTL = " + ttl);
-            Thread.sleep(Long.parseLong(ttl));
-            log.info("finished task 1");
-
-            return ResponseEntity.ok("done");
-        } catch (Exception e) {
-            throw new RuntimeException("Error running task 1");
-        }
-    }
-
     @GetMapping("/error")
     public String error(Map<String, Object> model) {
-        model.put("appName", wuDetails.getName());
+        model.put("app", wuDetails);
         model.put("view", "error");
         return "default";
     }

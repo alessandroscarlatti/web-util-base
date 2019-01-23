@@ -6,6 +6,7 @@ package com.scarlatti.webutil.model;
  */
 public class WuDetails {
     private String name;
+    private String subtitle;
 
     public String getName() {
         return name;
@@ -13,5 +14,14 @@ public class WuDetails {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 }
