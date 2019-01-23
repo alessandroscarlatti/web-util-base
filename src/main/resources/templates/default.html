@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <title th:replace="${view} :: title">Basic Single Page App</title>
+    <title th:replace="${view} :: title">App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta th:name="_csrf" th:content="${_csrf.parameterName}"/>
     <meta th:name="_csrf_parameter" th:content="${_csrf.token}"/>
@@ -38,7 +38,7 @@
 <nav class="navbar">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">WebSiteName</a>
+            <a class="navbar-brand" th:text="${appName}" href="/">App</a>
         </div>
         <p class="navbar-text">
             yeah

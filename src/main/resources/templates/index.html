@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <!--Provide the title for this view-->
-    <title th:fragment="title">WebSiteName</title>
+    <title th:fragment="title" th:text="${appName}">App</title>
 </head>
 <body>
 
@@ -13,6 +13,16 @@
             <h3 class="card-title">Index</h3>
 
             <div><p>Description of this utility...perhaps a readme rendering...</p></div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <a href="/groups">Activity Groups</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

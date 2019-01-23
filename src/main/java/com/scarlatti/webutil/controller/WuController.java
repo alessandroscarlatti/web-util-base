@@ -55,6 +55,8 @@ public class WuController implements ErrorController {
         model.put("motd", motd);
         model.put("view", "index");
 
+        model.put("appName", wuDetails.getName());
+
         model.put("breadcrumb", new WuBreadcrumb(
             new WuCrumb(wuDetails.getName(), "/"),
             new WuCrumb("Home", "/")
@@ -68,12 +70,15 @@ public class WuController implements ErrorController {
     public String login(Map<String, Object> model) {
         model.put("view", "login");
 
+        model.put("appName", wuDetails.getName());
+
         return "default";
     }
 
     @GetMapping("/groups")
     public String groups(Map<String, Object> model) {
         model.put("view", "groups");
+        model.put("appName", wuDetails.getName());
 
         model.put("breadcrumb", new WuBreadcrumb(
             new WuCrumb(wuDetails.getName(), "/"),
@@ -95,6 +100,7 @@ public class WuController implements ErrorController {
     @PostMapping("/groups")
     public String groups(@RequestParam("groupsJson") String groupsJson, Map<String, Object> model) {
         model.put("view", "groups");
+        model.put("appName", wuDetails.getName());
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -112,6 +118,7 @@ public class WuController implements ErrorController {
     @GetMapping("/groups/{groupName}")
     public String group(@PathVariable("groupName") String groupName, Map<String, Object> model) {
         model.put("view", "group");
+        model.put("appName", wuDetails.getName());
 
         model.put("breadcrumb", new WuBreadcrumb(
             new WuCrumb(wuDetails.getName(), "/"),
@@ -134,6 +141,7 @@ public class WuController implements ErrorController {
     @PostMapping("/groups/{groupName}")
     public String updateGroup(@PathVariable("groupName") String groupName, @RequestParam("activitiesJson") String activitiesJson, Map<String, Object> model) {
         model.put("view", "group");
+        model.put("appName", wuDetails.getName());
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -149,6 +157,7 @@ public class WuController implements ErrorController {
     @GetMapping("/activities/{activityName}")
     public String activity(@PathVariable("activityName") String activityName, Map<String, Object> model) {
         model.put("view", "group");
+        model.put("appName", wuDetails.getName());
 
         ActivityController activityController = findActivityController(activityName);
 
@@ -184,6 +193,7 @@ public class WuController implements ErrorController {
 
     @GetMapping("/error")
     public String error(Map<String, Object> model) {
+        model.put("appName", wuDetails.getName());
         model.put("view", "error");
         return "default";
     }
