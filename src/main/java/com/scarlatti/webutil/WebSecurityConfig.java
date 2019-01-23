@@ -2,6 +2,7 @@ package com.scarlatti.webutil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.GenericFilterBean;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -97,6 +99,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .formLogin()
             .loginPage("/login")  // must be specified to make Spring call our page, otherwise, it will generate one on its own, and it won't be as pretty as ours.
+            .permitAll()
+            .and()
+            .logout()
             .permitAll();
 
         http.rememberMe();
@@ -107,6 +112,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(new CustomFilter1(), BasicAuthenticationFilter.class);
         http.addFilterAfter(new CustomFilter2(), BasicAuthenticationFilter.class);
+    }
+
+    @Bean
+    public SpringSecurityDialect springSecurityDialect() {
+        return new SpringSecurityDialect();
     }
 
     public static class CustomFilter1 extends GenericFilterBean {

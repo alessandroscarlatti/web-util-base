@@ -46,10 +46,24 @@
         <ul class="nav navbar-nav">
             <li><a href="/groups">Activities</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> id12345</a></li>
-            <li><a href="/login?logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+        <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Guest</a></li>
+            <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
         </ul>
+
+        <form id="logout" action="/logout" method="post">
+            <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span> <span
+                        th:text="${#authentication.name}"></span></a></li>
+                <li>
+                    <a href="#" onclick="document.getElementById('logout').submit()">
+                        <span class="glyphicon glyphicon-log-out"></span> Logout
+                    </a>
+                </li>
+                <input type="hidden" th:attr="name=${_csrf.parameterName},value=${_csrf.token}"/>
+            </ul>
+        </form>
     </div>
 </nav>
 
