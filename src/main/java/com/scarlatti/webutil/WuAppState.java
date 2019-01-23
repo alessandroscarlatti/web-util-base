@@ -39,8 +39,13 @@ public class WuAppState {
     public List<WuTask> tasksByGroup(String groupName) {
         return wuDetails.getTasks()
             .stream()
-            .filter(wuTask -> wuTask.getName().equals(groupName))
+            .filter(wuTask -> groupName.equals(wuTask.getGroup()))
             .collect(toList());
+    }
+
+    public void updateTasksByGroup(String groupName, List<WuTask> tasks) {
+        wuDetails.getTasks().removeIf(wuTask -> wuTask.getGroup().equals(groupName));
+        wuDetails.getTasks().addAll(tasks);
     }
 
     public void updateWuDetails(WuDetails wuDetails) {

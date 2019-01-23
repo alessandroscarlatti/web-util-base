@@ -9,7 +9,8 @@
     {
       "name": "task1",
       "prettyName": "Task 1",
-      "link": "task1"
+      "link": "task1",
+      "group": "group1"
     }
   ]
 }

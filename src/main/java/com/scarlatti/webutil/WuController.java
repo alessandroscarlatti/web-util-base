@@ -1,21 +1,23 @@
 package com.scarlatti.webutil;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scarlatti.webutil.model.WuBreadcrumb;
 import com.scarlatti.webutil.model.WuCrumb;
+import com.scarlatti.webutil.model.WuDetails.WuTask;
 import com.scarlatti.webutil.model.WuDetails.WuTaskGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +48,12 @@ public class WuController implements ErrorController {
 
         model.put("motd", motd);
         model.put("view", "index");
+
+        model.put("breadcrumb", new WuBreadcrumb(
+            new WuCrumb("WebSiteName", "/"),
+            new WuCrumb("Home", "/")
+        ));
+
 
         return "default";
     }
@@ -96,12 +104,40 @@ public class WuController implements ErrorController {
     }
 
     @GetMapping("/group/{groupName}")
-    public String groupw(@PathVariable("groupName") String groupName, Map<String, Object> model) {
+    public String group(@PathVariable("groupName") String groupName, Map<String, Object> model) {
         model.put("view", "group");
 
+        model.put("breadcrumb", new WuBreadcrumb(
+            new WuCrumb("WebSiteName", "/"),
+            new WuCrumb("Task Groups", "/groups"),
+            new WuCrumb(wuAppState.groupByName(groupName).getPrettyName(), "/groups/" + groupName)
+        ));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            model.put("tasksJson", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(wuAppState.tasksByGroup(groupName)));
+        } catch (Exception e) {
+            throw new RuntimeException("Error writing JSON.", e);
+        }
+        model.put("group", wuAppState.groupByName(groupName));
         model.put("tasks", wuAppState.tasksByGroup(groupName));
 
         return "default";
+    }
+
+    @PostMapping("/group/{groupName}")
+    public String updateGroup(@PathVariable("groupName") String groupName, @RequestParam("tasksJson") String tasksJson, Map<String, Object> model) {
+        model.put("view", "group");
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<WuTask> taskGroups = objectMapper.readValue(tasksJson, new TypeReference<List<WuTask>>() {});
+            wuAppState.updateTasksByGroup(groupName, taskGroups);
+        } catch (Exception e) {
+            throw new RuntimeException("Error parsing json: " + tasksJson, e);
+        }
+
+        return "redirect:/group/" + groupName;
     }
 
     @PostMapping("/task1")

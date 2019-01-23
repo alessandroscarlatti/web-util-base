@@ -3,6 +3,14 @@
 <head>
     <!--Provide the title for this view-->
     <title th:fragment="title">Tasks</title>
+
+    <style th:fragment="styles">
+        .json-textarea {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -10,7 +18,56 @@
 <div class="container" th:fragment="content">
     <div>
         <div>
-            <h3>Group</h3>
+            <h3 th:text="${group.prettyName}">Group</h3>
+            <div class="row">
+                <th:block th:each="task : ${tasks}">
+
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <a href="#" th:text="${task.prettyName}">GroupName</a>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+
+            <!-- Trigger the modal with a button -->
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Tasks</button>
+
+            <!-- Modal -->
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Edit Tasks</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <form method="post">
+
+                                <div class="form-group">
+                                    <textarea class="json-textarea" name="tasksJson" th:text="${tasksJson}"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </div>
+
+                                <input type="hidden" th:attr="name=${_csrf.parameterName},value=${_csrf.token}"/>
+                            </form>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
