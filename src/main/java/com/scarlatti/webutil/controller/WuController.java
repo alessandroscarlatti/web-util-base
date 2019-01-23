@@ -151,7 +151,7 @@ public class WuController implements ErrorController {
             throw new RuntimeException("Error parsing json: " + activitiesJson, e);
         }
 
-        return "redirect:/group/" + groupName;
+        return "redirect:/groups/" + groupName;
     }
 
     @GetMapping("/activities/{activityName}")
