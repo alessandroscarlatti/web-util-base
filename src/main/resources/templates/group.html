@@ -20,12 +20,12 @@
         <div>
             <h3 th:text="${group.prettyName}">Group</h3>
             <div class="row">
-                <th:block th:each="task : ${tasks}">
+                <th:block th:each="activity : ${activities}">
 
                     <div class="col-md-4">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <a href="#" th:text="${task.prettyName}">GroupName</a>
+                                <a href="#" th:href="'/activities/' + ${activity.name}" th:text="${activity.prettyName}">GroupName</a>
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Trigger the modal with a button -->
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Tasks</button>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Activities</button>
 
             <!-- Modal -->
             <div id="myModal" class="modal fade" role="dialog">
@@ -43,14 +43,14 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Edit Tasks</h4>
+                            <h4 class="modal-title">Edit Activities</h4>
                         </div>
                         <div class="modal-body">
 
                             <form method="post">
 
                                 <div class="form-group">
-                                    <textarea class="json-textarea" name="tasksJson" th:text="${tasksJson}"></textarea>
+                                    <textarea class="json-textarea" name="activitiesJson" th:text="${activitiesJson}"></textarea>
                                 </div>
 
                                 <div class="form-group">

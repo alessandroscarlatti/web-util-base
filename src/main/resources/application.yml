@@ -15,3 +15,6 @@ spring:
       base-dn: dc=springframework,dc=org
   thymeleaf:
     cache: false
+
+wu:
+  name: "Cool Utility"

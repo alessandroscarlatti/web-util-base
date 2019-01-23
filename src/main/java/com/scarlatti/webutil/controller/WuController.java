@@ -1,11 +1,13 @@
-package com.scarlatti.webutil;
+package com.scarlatti.webutil.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scarlatti.webutil.WuAppState;
 import com.scarlatti.webutil.model.WuBreadcrumb;
 import com.scarlatti.webutil.model.WuCrumb;
-import com.scarlatti.webutil.model.WuDetails.WuTask;
-import com.scarlatti.webutil.model.WuDetails.WuTaskGroup;
+import com.scarlatti.webutil.model.WuActivityDetails.WuActivity;
+import com.scarlatti.webutil.model.WuActivityDetails.WuActivityGroup;
+import com.scarlatti.webutil.model.WuDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
@@ -33,9 +35,13 @@ public class WuController implements ErrorController {
 
     private static final Logger log = LoggerFactory.getLogger(WuController.class);
     private WuAppState wuAppState;
+    private WuDetails wuDetails;
+    private List<ActivityController> activityControllers;
 
-    public WuController(WuAppState wuAppState) {
+    public WuController(WuAppState wuAppState, WuDetails wuDetails, List<ActivityController> activityControllers) {
         this.wuAppState = wuAppState;
+        this.wuDetails = wuDetails;
+        this.activityControllers = activityControllers;
     }
 
     @GetMapping("/")
@@ -50,7 +56,7 @@ public class WuController implements ErrorController {
         model.put("view", "index");
 
         model.put("breadcrumb", new WuBreadcrumb(
-            new WuCrumb("WebSiteName", "/"),
+            new WuCrumb(wuDetails.getName(), "/"),
             new WuCrumb("Home", "/")
         ));
 
@@ -70,8 +76,8 @@ public class WuController implements ErrorController {
         model.put("view", "groups");
 
         model.put("breadcrumb", new WuBreadcrumb(
-            new WuCrumb("WebSiteName", "/"),
-            new WuCrumb("Task Groups", "/groups")
+            new WuCrumb(wuDetails.getName(), "/"),
+            new WuCrumb("Activities", "/groups")
         ));
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -92,8 +98,8 @@ public class WuController implements ErrorController {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<WuTaskGroup> taskGroups = objectMapper.readValue(groupsJson, new TypeReference<List<WuTaskGroup>>() {});
-            wuAppState.getWuDetails().setGroups(taskGroups);
+            List<WuActivityGroup> taskGroups = objectMapper.readValue(groupsJson, new TypeReference<List<WuActivityGroup>>() {});
+            wuAppState.getWuActivityDetails().setGroups(taskGroups);
         } catch (Exception e) {
             throw new RuntimeException("Error parsing json: " + groupsJson, e);
         }
@@ -103,41 +109,63 @@ public class WuController implements ErrorController {
         return "redirect:/groups";
     }
 
-    @GetMapping("/group/{groupName}")
+    @GetMapping("/groups/{groupName}")
     public String group(@PathVariable("groupName") String groupName, Map<String, Object> model) {
         model.put("view", "group");
 
         model.put("breadcrumb", new WuBreadcrumb(
-            new WuCrumb("WebSiteName", "/"),
-            new WuCrumb("Task Groups", "/groups"),
+            new WuCrumb(wuDetails.getName(), "/"),
+            new WuCrumb("Activities", "/groups"),
             new WuCrumb(wuAppState.groupByName(groupName).getPrettyName(), "/groups/" + groupName)
         ));
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            model.put("tasksJson", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(wuAppState.tasksByGroup(groupName)));
+            model.put("activitiesJson", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(wuAppState.activitiesByGroup(groupName)));
         } catch (Exception e) {
             throw new RuntimeException("Error writing JSON.", e);
         }
         model.put("group", wuAppState.groupByName(groupName));
-        model.put("tasks", wuAppState.tasksByGroup(groupName));
+        model.put("activities", wuAppState.activitiesByGroup(groupName));
 
         return "default";
     }
 
-    @PostMapping("/group/{groupName}")
-    public String updateGroup(@PathVariable("groupName") String groupName, @RequestParam("tasksJson") String tasksJson, Map<String, Object> model) {
+    @PostMapping("/groups/{groupName}")
+    public String updateGroup(@PathVariable("groupName") String groupName, @RequestParam("activitiesJson") String activitiesJson, Map<String, Object> model) {
         model.put("view", "group");
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<WuTask> taskGroups = objectMapper.readValue(tasksJson, new TypeReference<List<WuTask>>() {});
-            wuAppState.updateTasksByGroup(groupName, taskGroups);
+            List<WuActivity> activities = objectMapper.readValue(activitiesJson, new TypeReference<List<WuActivity>>() {});
+            wuAppState.updateActivitiesByGroup(groupName, activities);
         } catch (Exception e) {
-            throw new RuntimeException("Error parsing json: " + tasksJson, e);
+            throw new RuntimeException("Error parsing json: " + activitiesJson, e);
         }
 
         return "redirect:/group/" + groupName;
+    }
+
+    @GetMapping("/activities/{activityName}")
+    public String activity(@PathVariable("activityName") String activityName, Map<String, Object> model) {
+        model.put("view", "group");
+
+        ActivityController activityController = findActivityController(activityName);
+
+        WuActivity wuActivity = wuAppState.activityByName(activityName);
+        WuActivityGroup wuActivityGroup = wuAppState.groupByName(wuActivity.getGroup());
+
+        model.put("view", wuActivity.getName());
+        model.put("breadcrumb", new WuBreadcrumb(
+            new WuCrumb(wuDetails.getName(), "/"),
+            new WuCrumb("Activities", "/groups"),
+            new WuCrumb(wuActivityGroup.getPrettyName(), "/groups/" + wuActivityGroup.getName()),
+            new WuCrumb(wuActivity.getPrettyName(), "/groups/" + wuActivity.getName())
+        ));
+
+        activityController.loadActivity(model);
+
+        return "default";
     }
 
     @PostMapping("/task1")
@@ -163,5 +191,15 @@ public class WuController implements ErrorController {
     @Override
     public String getErrorPath() {
         return "/error";
+    }
+
+    private ActivityController findActivityController(String activityName) {
+        for (ActivityController activityController : activityControllers) {
+            if (activityName.equals(activityController.getActivity().getName())) {
+                return activityController;
+            }
+        }
+
+        throw new RuntimeException("No activity found: " + activityName);
     }
 }

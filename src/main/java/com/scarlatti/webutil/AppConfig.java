@@ -1,9 +1,11 @@
 package com.scarlatti.webutil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scarlatti.webutil.model.WuActivityDetails;
 import com.scarlatti.webutil.model.WuDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,13 +19,19 @@ public class AppConfig {
     private static final Logger log = LoggerFactory.getLogger(AppConfig.class);
 
     @Bean
-    WuDetails wuDetails() {
+    WuActivityDetails wuActivityDetails() {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(WuDetails.class.getResourceAsStream("/wuDetails.json"), WuDetails.class);
+            return objectMapper.readValue(WuActivityDetails.class.getResourceAsStream("/wuDetails.json"), WuActivityDetails.class);
         } catch (Exception e) {
             log.error("Error initializing tasks from JSON.", e);
-            return new WuDetails();
+            return new WuActivityDetails();
         }
+    }
+
+    @Bean
+    @ConfigurationProperties("wu")
+    WuDetails wuDetails() {
+        return new WuDetails();
     }
 }

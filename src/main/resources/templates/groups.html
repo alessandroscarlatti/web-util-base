@@ -2,7 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <!--Provide the title for this view-->
-    <title th:fragment="title">Task Groups</title>
+    <title th:fragment="title">Activity Groups</title>
+    <style th:fragment="styles">
+        .json-textarea {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
 
@@ -10,7 +16,7 @@
 <div class="container" th:fragment="content">
     <div>
         <div>
-            <h3>Task Groups</h3>
+            <h3>Activity Groups</h3>
 
             <div class="row">
                 <th:block th:each="group : ${groups}">
@@ -18,7 +24,7 @@
                     <div class="col-md-4">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <a href="#" th:href="'/group/' + ${group.name}" th:text="${group.prettyName}">GroupName</a>
+                                <a href="#" th:href="'/groups/' + ${group.name}" th:text="${group.prettyName}">GroupName</a>
                             </div>
                         </div>
                     </div>
@@ -43,7 +49,7 @@
                             <form action="groups" method="post">
 
                                 <div class="form-group">
-                                    <textarea name="groupsJson" th:text="${groupsJson}"></textarea>
+                                    <textarea class="json-textarea" name="groupsJson" th:text="${groupsJson}"></textarea>
                                 </div>
 
                                 <div class="form-group">

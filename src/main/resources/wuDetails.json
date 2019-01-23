@@ -5,11 +5,10 @@
       "prettyName": "Group 1"
     }
   ],
-  "tasks": [
+  "activities": [
     {
-      "name": "task1",
-      "prettyName": "Task 1",
-      "link": "task1",
+      "name": "basicActivity",
+      "prettyName": "Activity 1",
       "group": "group1"
     }
   ]

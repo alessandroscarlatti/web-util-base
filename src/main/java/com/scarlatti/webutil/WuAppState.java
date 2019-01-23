@@ -1,8 +1,8 @@
 package com.scarlatti.webutil;
 
-import com.scarlatti.webutil.model.WuDetails;
-import com.scarlatti.webutil.model.WuDetails.WuTask;
-import com.scarlatti.webutil.model.WuDetails.WuTaskGroup;
+import com.scarlatti.webutil.model.WuActivityDetails;
+import com.scarlatti.webutil.model.WuActivityDetails.WuActivity;
+import com.scarlatti.webutil.model.WuActivityDetails.WuActivityGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,43 +17,51 @@ import static java.util.stream.Collectors.toList;
  */
 @Component
 public class WuAppState {
-    private WuDetails wuDetails;
+    private WuActivityDetails wuActivityDetails;
     private static final Logger log = LoggerFactory.getLogger(WuAppState.class);
 
-    public WuAppState(WuDetails wuDetails) {
-        this.wuDetails = wuDetails;
+    public WuAppState(WuActivityDetails wuActivityDetails) {
+        this.wuActivityDetails = wuActivityDetails;
     }
 
-    public List<WuTaskGroup> allGroups() {
-        return wuDetails.getGroups();
+    public List<WuActivityGroup> allGroups() {
+        return wuActivityDetails.getGroups();
     }
 
-    public WuTaskGroup groupByName(String groupName) {
-        return wuDetails.getGroups()
+    public WuActivityGroup groupByName(String groupName) {
+        return wuActivityDetails.getGroups()
             .stream()
-            .filter(wuTaskGroup -> wuTaskGroup.getName().equals(groupName))
+            .filter(wuActivityGroup -> wuActivityGroup.getName().equals(groupName))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Could not find group " + groupName));
     }
 
-    public List<WuTask> tasksByGroup(String groupName) {
-        return wuDetails.getTasks()
+    public List<WuActivity> activitiesByGroup(String groupName) {
+        return wuActivityDetails.getActivities()
             .stream()
-            .filter(wuTask -> groupName.equals(wuTask.getGroup()))
+            .filter(wuActivity -> groupName.equals(wuActivity.getGroup()))
             .collect(toList());
     }
 
-    public void updateTasksByGroup(String groupName, List<WuTask> tasks) {
-        wuDetails.getTasks().removeIf(wuTask -> wuTask.getGroup().equals(groupName));
-        wuDetails.getTasks().addAll(tasks);
+    public WuActivity activityByName(String activityName) {
+        return wuActivityDetails.getActivities()
+            .stream()
+            .filter(wuActivity -> activityName.equals(wuActivity.getName()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Could not find activity " + activityName));
     }
 
-    public void updateWuDetails(WuDetails wuDetails) {
-        log.info("Updating WU Details: {}", wuDetails);
-        this.wuDetails = wuDetails;
+    public void updateActivitiesByGroup(String groupName, List<WuActivity> tasks) {
+        wuActivityDetails.getActivities().removeIf(wuActivity -> wuActivity.getGroup().equals(groupName));
+        wuActivityDetails.getActivities().addAll(tasks);
     }
 
-    public WuDetails getWuDetails() {
-        return wuDetails;
+    public void updateWuDetails(WuActivityDetails wuActivityDetails) {
+        log.info("Updating WU Details: {}", wuActivityDetails);
+        this.wuActivityDetails = wuActivityDetails;
+    }
+
+    public WuActivityDetails getWuActivityDetails() {
+        return wuActivityDetails;
     }
 }
