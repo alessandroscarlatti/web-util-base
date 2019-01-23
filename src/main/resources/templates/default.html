@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <title>Basic Single Page App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:replace="${view} :: title">Basic Single Page App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta th:name="_csrf" th:content="${_csrf.parameterName}"/>
     <meta th:name="_csrf_parameter" th:content="${_csrf.token}"/>
-    <link rel="shortcut icon" type="image/png" href="/resources/favicon.png" />
-    <link rel="stylesheet" href="https://unpkg.com/mustard-ui@latest/dist/css/mustard-ui.min.css" />
+    <link rel="shortcut icon" type="image/png" href="/resources/favicon.png"/>
+    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>
     <style>
         body, html {
             height: 100%;
@@ -18,21 +20,52 @@
             height: 100%;
             width: 100%;
             z-index: -1;
-            background: url(https://icdn3.digitaltrends.com/image/50395182-infinite-space-background-with-silhouette-of-telescope.jpg?ver=1) no-repeat center;
-            background-size: cover;
+            background: url(./resources/gear.jpg) no-repeat center;
+            background-size: contain;
+            opacity: 0.5;
         }
     </style>
     <style th:replace="${view} :: styles"></style>
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
     <script type="text/javascript" src="/resources/script.js"></script>
 </head>
 <body>
 <div class="bg"></div>
-<div th:if="${#authentication}" th:text="${#authentication.name}"></div>
-<div th:if="${#authentication}" th:text="${#authentication.authorities}"></div>
+
+<!---->
+<!--Header for all pages-->
+<!---->
+
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebSiteName</a>
+        </div>
+        <p class="navbar-text">
+            yeah
+        </p>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">Page 1</a></li>
+            <li><a href="#">Page 2</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> id12345</a></li>
+            <li><a href="/login?logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div th:if="${breadcrumb != null}">
+    <ul class="breadcrumb">
+        <th:block th:each="crumb : ${breadcrumb.ancestors}">
+            <li><a href="#" th:href="${crumb.link}" th:text="${crumb.name}">...</a></li>
+        </th:block>
+
+        <li class="active" th:text="${breadcrumb.last.name}">...</li>
+    </ul>
+</div>
+<!--<div th:if="${#authentication}" th:text="${#authentication.name}"></div>-->
+<!--<div th:if="${#authentication}" th:text="${#authentication.authorities}"></div>-->
 <div th:replace="${view} :: content">Page Content</div>
 </body>
 </html>

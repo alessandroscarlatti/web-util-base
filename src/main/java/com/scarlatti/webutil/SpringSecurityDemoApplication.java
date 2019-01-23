@@ -1,4 +1,4 @@
-package com.scarlatti.springsecuritydemo;
+package com.scarlatti.webutil;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

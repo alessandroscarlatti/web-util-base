@@ -1,78 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Basic Single Page App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="https://unpkg.com/mustard-ui@latest/dist/css/mustard-ui.min.css"/>
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-        }
-
-        body, h3 {
-            color: red;
-        }
-
-        .bg {
-            position: fixed;
-            height: 100%;
-            width: 100%;
-            z-index: -1;
-            background: url(https://icdn3.digitaltrends.com/image/50395182-infinite-space-background-with-silhouette-of-telescope.jpg?ver=1) no-repeat center;
-            background-size: cover;
-        }
-    </style>
-    <style th:fragment="styles">
-        .transparentCard {
-            background-color: initial;
-            border: none;
-            box-shadow: none;
-        }
-
-        body,h3 {
-            color: white;
-        }
-
-        .alert-danger,.alert-info {
-            color: black;
-        }
-    </style>
+    <title th:fragment="title">Login</title>
 </head>
 <body>
 <div class="bg"></div>
 <div class="container" th:fragment="content">
 
-    <div class="card transparentCard">
-        <!--<h3 class="card-title">Login</h3>-->
-
-        <form action="/login" method="post">
-            <div class="form-control">
-                <label>Username</label>
-                <input type="text" name="username" placeholder="username"/>
+    <form class="form-horizontal"  action="/login" method="post">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="email">Email:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="email" placeholder="Enter email" name="username"/>
             </div>
-
-            <div class="form-control">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="password"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="pwd">Password:</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password"/>
             </div>
-
-            <div class="form-control">
-                <label>Remember Me</label>
-                <input type="checkbox" name="remember-me"/>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label><input type="checkbox" name="remember-me"/> Remember me</label>
+                </div>
             </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
 
-            <ul class="card-actions">
-                <li><input type="submit" class="button-default" value="Login"/></li>
-            </ul>
+        <input type="hidden" th:attr="name=${_csrf.parameterName},value=${_csrf.token}" />
+    </form>
 
-            <input type="hidden" th:attr="name=${_csrf.parameterName},value=${_csrf.token}" />
-        </form>
-
-        <p class="alert alert-danger" th:if="${param.error}">Error logging in.  Please try again.</p>
-        <p class="alert alert-info" th:if="${param.logout}">You have been logged out.</p>
-
-    </div>
+    <p class="alert alert-danger" th:if="${param.error}">Error logging in. Please try again.</p>
+    <p class="alert alert-info" th:if="${param.logout}">You have been logged out.</p>
 </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.scarlatti.springsecuritydemo;
+package com.scarlatti.webutil;
 
 import org.junit.Assert;
 import org.junit.Test;

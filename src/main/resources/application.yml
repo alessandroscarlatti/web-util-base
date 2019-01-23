@@ -13,3 +13,5 @@ spring:
     embedded:
       port: 8389
       base-dn: dc=springframework,dc=org
+  thymeleaf:
+    cache: false

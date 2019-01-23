@@ -1,0 +1,15 @@
+{
+  "groups": [
+    {
+      "name": "group1",
+      "prettyName": "Group 1"
+    }
+  ],
+  "tasks": [
+    {
+      "name": "task1",
+      "prettyName": "Task 1",
+      "link": "task1"
+    }
+  ]
+}

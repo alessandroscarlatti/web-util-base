@@ -1,4 +1,4 @@
-package com.scarlatti.springsecuritydemo;
+package com.scarlatti.webutil;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

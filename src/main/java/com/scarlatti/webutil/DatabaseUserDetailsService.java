@@ -1,4 +1,4 @@
-package com.scarlatti.springsecuritydemo;
+package com.scarlatti.webutil;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
