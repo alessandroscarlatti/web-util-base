@@ -32,7 +32,7 @@ function doSomethingLong() {
     inProgress();
 
     $.post("/activities/basicActivity/task1", {
-        ttl: "5000",
+        ttl: "1000",
         [csrfParameterName]: csrfParameterValue
     }).done(function (data, status, xhr) {
         completed();

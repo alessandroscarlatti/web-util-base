@@ -106,6 +106,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.rememberMe();
 
+        http.headers().frameOptions().sameOrigin();
+
         http
             .logout()
             .permitAll();

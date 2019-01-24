@@ -17,6 +17,12 @@
         .showOnErrorAlert {
 
         }
+
+        iframe {
+            width: 100%;
+            resize: vertical;
+            height: 50vh;
+        }
     </style>
 </head>
 <body>
@@ -28,13 +34,17 @@
         <div>
             <h3>Basic Activity</h3>
 
-            <div><p>Basic Activity</p></div>
-
             <div class="container">
                 <button class="hideInProgress btn btn-info" onclick="doSomethingLong()">Go</button>
                 <img class="showInProgress loader" src="/resources/loading.gif" alt="loading"/>
+                <p></p>
                 <div class="showOnError showOnErrorAlert alert alert-danger">Error.</div>
                 <div class="showOnDone alert alert-success">Done.</div>
+            </div>
+            <div class="well">
+                <iframe src="http://localhost:8080">
+
+                </iframe>
             </div>
         </div>
     </div>

@@ -8,7 +8,12 @@
   "activities": [
     {
       "name": "basicActivity",
-      "prettyName": "Activity 1",
+      "prettyName": "Basic Activity",
+      "group": "group1"
+    },
+    {
+      "name": "reactActivity",
+      "prettyName": "React Activity",
       "group": "group1"
     }
   ]

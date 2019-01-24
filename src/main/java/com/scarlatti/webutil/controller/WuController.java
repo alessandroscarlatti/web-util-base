@@ -88,6 +88,7 @@ public class WuController implements ErrorController {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             model.put("groupsJson", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(wuAppState.allGroups()));
+            model.put("activitiesJson", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(wuAppState.getWuActivityDetails().getActivities()));
         } catch (Exception e) {
             throw new RuntimeException("Error writing JSON.", e);
         }
@@ -98,7 +99,7 @@ public class WuController implements ErrorController {
     }
 
     @PostMapping("/groups")
-    public String groups(@RequestParam("groupsJson") String groupsJson, Map<String, Object> model) {
+    public String updateGroups(@RequestParam("groupsJson") String groupsJson, Map<String, Object> model) {
         model.put("view", "groups");
         model.put("app", wuDetails);
 
@@ -108,6 +109,24 @@ public class WuController implements ErrorController {
             wuAppState.getWuActivityDetails().setGroups(taskGroups);
         } catch (Exception e) {
             throw new RuntimeException("Error parsing json: " + groupsJson, e);
+        }
+
+        model.put("groups", wuAppState.allGroups());
+
+        return "redirect:/groups";
+    }
+
+    @PostMapping("/activities")
+    public String updateActivities(@RequestParam("activitiesJson") String activitiesJson, Map<String, Object> model) {
+        model.put("view", "groups");
+        model.put("app", wuDetails);
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<WuActivity> taskGroups = objectMapper.readValue(activitiesJson, new TypeReference<List<WuActivity>>() {});
+            wuAppState.getWuActivityDetails().setActivities(taskGroups);
+        } catch (Exception e) {
+            throw new RuntimeException("Error parsing json: " + activitiesJson, e);
         }
 
         model.put("groups", wuAppState.allGroups());
@@ -156,7 +175,6 @@ public class WuController implements ErrorController {
 
     @GetMapping("/activities/{activityName}")
     public String activity(@PathVariable("activityName") String activityName, Map<String, Object> model) {
-        model.put("view", "group");
         model.put("app", wuDetails);
 
         ActivityController activityController = findActivityController(activityName);
