@@ -15,14 +15,11 @@ class TaskTemplate {
     }
 
     _doExecute(params, callbackInterface) {
-
         callbackInterface.started();
         try {
-            let result = this.workFunc(params);
-
-            if (!this.canceled) {
-                callbackInterface.completed(result);
-            }
+            let result = this.workFunc(params, {
+                completed: callbackInterface.completed
+            });
         } catch (e) {
             callbackInterface.failed(e);
         }
@@ -45,6 +42,7 @@ class TaskExecutorUi extends React.Component {
             exception: ""
         };
 
+        this.started = this.started.bind(this);
         this.completed = this.completed.bind(this);
         this.failed = this.failed.bind(this);
         this.renderReady = this.renderReady.bind(this);
@@ -52,7 +50,12 @@ class TaskExecutorUi extends React.Component {
         this.renderCompleted = this.renderCompleted.bind(this);
         this.renderFailed = this.renderFailed.bind(this);
         this.execute = this.execute.bind(this);
-        this.doExecute = this.doExecute.bind(this);
+    }
+
+    started() {
+        this.setState({
+            taskState: "inProgress"
+        })
     }
 
     completed(result) {
@@ -62,6 +65,8 @@ class TaskExecutorUi extends React.Component {
     }
 
     failed(response) {
+        console.log("failed", response);
+
         this.setState({
             taskState: "failed",
             exception: response.status
@@ -69,18 +74,31 @@ class TaskExecutorUi extends React.Component {
     }
 
     execute() {
-        // this.setState({
-        //     state: "inProgress"
-        // }, this.doExecute);
-
         console.log("params", this.props.paramsWrapper.params)
-    }
-
-    doExecute() {
         this.props.taskTemplate.execute(this.props.params, this);
     }
 
     render() {
+
+        let executorControls = this.renderExecutorControls();
+
+        return (
+            <div className="container">
+                <div className="row">
+                    <h3>{this.props.title}</h3>
+                </div>
+                <div className="row">
+                    <p>{this.props.message}</p>
+                </div>
+                <div className="row">
+                    {this.props.paramProvider}
+                </div>
+                {executorControls}
+            </div>
+        );
+    }
+
+    renderExecutorControls() {
         switch (this.state.taskState) {
             case "ready":
                 return this.renderReady();
@@ -95,43 +113,46 @@ class TaskExecutorUi extends React.Component {
 
     renderReady() {
         return (
-            <div class="container">
-                <div className="row">
-                    <h3>{this.props.title}</h3>
-                </div>
-                <div className="row">
-                    <p>{this.props.message}</p>
-                </div>
-                <div className="row">
-                    {this.props.paramProvider}
-                </div>
-                <div className="row">
-                    <button className="btn btn-primary" onClick={this.execute}><span className="glyphicon glyphicon-play"></span> Execute</button>
-                </div>
+            <div className="row">
+                <button className="btn btn-primary" onClick={this.execute}><span
+                    className="glyphicon glyphicon-play"></span> Execute
+                </button>
             </div>
         )
     }
 
     renderInProgress() {
         return (
-            <div>In Progress</div>
+            <div className="row">
+                <button className="btn btn-primary" onClick={this.execute} disabled><span
+                    className="glyphicon glyphicon-play"></span> Execute
+                </button>
+                <p></p>
+                <p className="alert"><img style={{height: "33px"}} src="../src/main/resources/static/resources/spinner.gif"/>Working...</p>
+            </div>
         )
     }
 
     renderCompleted() {
         return (
-            <div>
-                <p>Completed</p>
-                <button className="btn" onClick={this.execute}>Execute</button>
+            <div className="row">
+                <button className="btn btn-primary" onClick={this.execute}><span
+                    className="glyphicon glyphicon-play"></span> Execute
+                </button>
+                <p></p>
+                <p className="alert alert-success">Completed</p>
             </div>
         )
     }
 
     renderFailed() {
         return (
-            <div>
-                <p>Failed</p>
-                <button className="btn" onClick={this.execute}>Execute</button>
+            <div className="row">
+                <button className="btn btn-primary" onClick={this.execute}><span
+                    className="glyphicon glyphicon-play"></span> Execute
+                </button>
+                <p></p>
+                <p className="alert alert-danger">Error</p>
             </div>
         )
     }

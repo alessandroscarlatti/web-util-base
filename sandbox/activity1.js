@@ -4,10 +4,13 @@
 function Activity() {
 
     const taskTemplate = new TaskTemplate({
-        workFunc: () => {
-            for (let i = 0; i < 100, i++;) {
-                console.log("asdf");
+        workFunc: (params, callbacks) => {
+            function completed() {
+                console.log("completed");
+                callbacks.completed("asdf");
             }
+
+            setTimeout(completed, 2000);
         }
     });
 
