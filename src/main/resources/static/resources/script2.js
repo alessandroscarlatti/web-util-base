@@ -402,12 +402,16 @@ class PageLoader extends React.Component {
         if (this.execution == null) {
             return (
                 <div>
-                    <span className="glyphicon glyphicon-exclamation-sign" /> Task has not been executed yet.
+                    <span className="glyphicon glyphicon-exclamation-sign"/> Task has not been executed yet.
                 </div>
             )
         }
 
         let durationMs = (this.execution.context.startTime && this.execution.context.endTime) ? this.execution.context.endTime - this.execution.context.startTime : "";
+
+        let paramsJson = this.execution.context.params ? JSON.stringify(this.execution.context.params, 0, 2) : "";
+        let paramsJsonRows = paramsJson.split(/\r\n|\r|\n/).length;
+        paramsJsonRows = Math.min(paramsJsonRows, 11);
 
         return (
             <div className="row">
@@ -421,7 +425,7 @@ class PageLoader extends React.Component {
                                     type="text"
                                     className="form-control"
                                     disabled
-                                    value={this.execution.context.startTime? this.execution.context.startTime : ""}
+                                    value={this.execution.context.startTime ? this.execution.context.startTime : ""}
                                 />
                             </div>
                         </div>
@@ -446,6 +450,20 @@ class PageLoader extends React.Component {
                                     className="form-control"
                                     disabled
                                     value={durationMs}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2">Parameters</label>
+                            <div className="col-sm-10">
+                                <textarea
+                                    type="text"
+                                    style={this.styles.jsonTextArea}
+                                    className="form-control"
+                                    disabled
+                                    value={paramsJson}
+                                    rows={paramsJsonRows}
                                 />
                             </div>
                         </div>
@@ -500,7 +518,10 @@ class PageLoader extends React.Component {
                     <div className="modal-content">
                         <div className="modal-header">
                             <button type="button" className="close" data-dismiss="modal">&times;</button>
-                            <h4 className="modal-title">Execution Info</h4>
+                            <h2 className="modal-title">
+                                <span className="text-info glyphicon glyphicon-info-sign"/>
+                                <span> Execution Info</span>
+                            </h2>
                         </div>
                         <div className="modal-body">
                             {props.children}

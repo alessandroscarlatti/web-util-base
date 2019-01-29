@@ -25,7 +25,10 @@
                     <div class="col-md-4">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <a href="#" th:href="'/groups/' + ${group.name}" th:text="${group.prettyName}">GroupName</a>
+                                <a href="#" th:href="'/groups/' + ${group.name}">
+                                    <span class="text-info glyphicon glyphicon-th"/>
+                                    <span th:text="${group.prettyName}">GroupName</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -33,8 +36,11 @@
             </div>
 
             <!-- Trigger the modal with a button -->
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editGroupsModal">Edit Groups</button>
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editAllActivitiesModal">Edit Activities</button>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editGroupsModal">Edit Groups
+            </button>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editAllActivitiesModal">Edit
+                Activities
+            </button>
 
             <!-- Edit Groups Modal -->
             <div id="editGroupsModal" class="modal fade" role="dialog">
@@ -51,7 +57,8 @@
                             <form action="groups" method="post">
 
                                 <div class="form-group">
-                                    <textarea class="json-textarea" name="groupsJson" th:text="${groupsJson}"></textarea>
+                                    <textarea class="json-textarea" name="groupsJson"
+                                              th:text="${groupsJson}"></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -85,7 +92,8 @@
                             <form action="/activities" method="post">
 
                                 <div class="form-group">
-                                    <textarea class="json-textarea" name="activitiesJson" th:text="${activitiesJson}"></textarea>
+                                    <textarea class="json-textarea" name="activitiesJson"
+                                              th:text="${activitiesJson}"></textarea>
                                 </div>
 
                                 <div class="form-group">
