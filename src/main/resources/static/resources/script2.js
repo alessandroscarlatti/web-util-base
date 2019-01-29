@@ -407,12 +407,49 @@ class PageLoader extends React.Component {
             )
         }
 
-        console.log("execution for modal:", this.execution);
+        let durationMs = (this.execution.context.startTime && this.execution.context.endTime) ? this.execution.context.endTime - this.execution.context.startTime : "";
 
         return (
             <div className="row">
                 <div className="container col-sm-12">
                     <form className="form-horizontal">
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2">Start Time</label>
+                            <div className="col-sm-10">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    disabled
+                                    value={this.execution.context.startTime? this.execution.context.startTime : ""}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2">End Time</label>
+                            <div className="col-sm-10">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    disabled
+                                    value={this.execution.context.endTime ? this.execution.context.endTime : ""}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2">Duration (milli)</label>
+                            <div className="col-sm-10">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    disabled
+                                    value={durationMs}
+                                />
+                            </div>
+                        </div>
+
                         <div className="form-group">
                             <label className="control-label col-sm-2">Status</label>
                             <div className="col-sm-10">
@@ -440,8 +477,9 @@ class PageLoader extends React.Component {
                         <div className="form-group">
                             <label className="control-label col-sm-2">Result</label>
                             <div className="col-sm-10">
-                                <input
+                                <textarea
                                     type="text"
+                                    style={this.styles.jsonTextArea}
                                     className="form-control"
                                     disabled
                                     value={this.execution.context.result ? this.execution.context.result : ""}
