@@ -10,6 +10,10 @@
             height: 200px;
             font-family: Consolas, monospace;
         }
+        .large-glyphicon {
+            font-size: 2em;
+            vertical-align: middle;
+        }
     </style>
 
 </head>
@@ -27,7 +31,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <a href="#" th:href="'/activities/' + ${activity.name}">
-                                    <span class="glyphicon glyphicon-cog" />
+                                    <span class="glyphicon glyphicon-cog large-glyphicon"/>
                                     <span th:text="${activity.prettyName}"> GroupName</span></a>
                             </div>
                         </div>

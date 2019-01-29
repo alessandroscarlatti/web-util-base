@@ -9,6 +9,10 @@
             height: 200px;
             font-family: Consolas, monospace;
         }
+        .large-glyphicon {
+            font-size: 2em;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -26,7 +30,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <a href="#" th:href="'/groups/' + ${group.name}">
-                                    <span class="text-info glyphicon glyphicon-th"/>
+                                    <span class="text-info glyphicon glyphicon-th large-glyphicon"/>
                                     <span th:text="${group.prettyName}">GroupName</span>
                                 </a>
                             </div>

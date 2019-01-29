@@ -208,6 +208,10 @@ class PageLoader extends React.Component {
             jsonTextArea: {
                 resize: "vertical",
                 fontFamily: "Consolas, monospace"
+            },
+            modalInfoGlyphicon: {
+                verticalAlign: "middle",
+                fontSize: "1.5em",
             }
         };
 
@@ -519,7 +523,7 @@ class PageLoader extends React.Component {
                         <div className="modal-header">
                             <button type="button" className="close" data-dismiss="modal">&times;</button>
                             <h2 className="modal-title">
-                                <span className="text-info glyphicon glyphicon-info-sign"/>
+                                <span style={this.styles.modalInfoGlyphicon} className="text-info glyphicon glyphicon-info-sign"/>
                                 <span> Execution Info</span>
                             </h2>
                         </div>
