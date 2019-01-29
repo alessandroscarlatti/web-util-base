@@ -11,7 +11,8 @@ class TaskTemplate {
      * @return Object (the return value of the execution)
      */
     execute(params, callbackInterface) {
-        setTimeout(this._doExecute.bind(this, params, callbackInterface), 0);
+        // setTimeout(this._doExecute.bind(this, params, callbackInterface), 0);
+        this._doExecute(params, callbackInterface);
     }
 
     _doExecute(params, callbackInterface) {
