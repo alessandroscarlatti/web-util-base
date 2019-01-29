@@ -20,7 +20,9 @@ function TaskExecution(paramsObjOrConfig) {
     let context = {
         params: params,
         status: "STARTING",
-        exitCode: "UNKNOWN"
+        exitCode: "UNKNOWN",
+        startTime: null,
+        endTime: null
     };
 
     let listenerKey = 0;
@@ -48,6 +50,7 @@ function TaskExecution(paramsObjOrConfig) {
             return;
 
         context.status = "STARTED";
+        context.startTime = new Date();
         updateSubscribers();
     }
 
@@ -68,6 +71,7 @@ function TaskExecution(paramsObjOrConfig) {
 
         context.status = "STOPPED";
         context.exitCode = exitCode;
+        context.endTime = new Date();
         updateSubscribers();
     }
 
@@ -79,6 +83,7 @@ function TaskExecution(paramsObjOrConfig) {
         if (isFinished())
             return;
 
+        context.endTime = new Date();
         context.status = "COMPLETED";
         if (args.length === 1) {
             context.exitCode = "COMPLETED";
@@ -99,8 +104,8 @@ function TaskExecution(paramsObjOrConfig) {
         if (isFinished())
             return;
 
+        context.endTime = new Date();
         context.status = "FAILED";
-
         if (args.length === 1) {
             context.exitCode = "FAILED";
             context.result = args[0];
@@ -197,9 +202,19 @@ class PageLoader extends React.Component {
     constructor(props) {
         super(props);
         this.execution = null;
+        this.modalId = "taskModal" + Math.floor(Math.random() * 1000);
+
+        this.styles = {
+            jsonTextArea: {
+                resize: "vertical",
+                fontFamily: "Consolas, monospace"
+            }
+        };
 
         this.load = this.load.bind(this);
         this.cancel = this.cancel.bind(this);
+        this.renderModal = this.renderModal.bind(this);
+        this.renderModalReport = this.renderModalReport.bind(this);
     }
 
     load() {
@@ -251,109 +266,295 @@ class PageLoader extends React.Component {
     }
 
     render() {
+        return (
+            <div>
+                {this.renderButton()}
+                <this.renderModal modalId={this.modalId}>
+                    <this.renderModalReport/>
+                </this.renderModal>
+            </div>
+        )
+    }
+
+    renderButton() {
+
+        let modalId = "#" + this.modalId;
+
+        let loaderGifStyles = {
+            backgroundImage: "url(/resources/spinner.gif)",
+            backgroundPosition: "center",
+            backgroundSize: "contain",
+            width: "2em",
+            height: "2em",
+            verticalAlign: "middle"
+        };
+
         if (this.execution == null) {
-            return this.renderReady();
+            return (
+                <div>
+                    <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
+                    <p/>
+                    <button className="btn btn-primary" onClick={this.load}>
+                        <span className="glyphicon glyphicon-play"/> Execute
+                    </button>
+                    <p/>
+                </div>
+            );
         }
 
         switch (this.execution.context.status) {
             case "STARTING":
-                return this.renderReady();
+                return (
+                    <div>
+
+                        <button className="btn btn-primary" onClick={this.load}>
+                            <span className="glyphicon glyphicon-play"/> Execute
+                        </button>
+                        <p/>
+                    </div>
+                );
             case "STARTED":
-                return this.renderInProgress();
+                return (
+                    <div>
+                        <span className="glyphicon" style={loaderGifStyles}/><span>&nbsp;</span>
+                        <button className="btn btn-danger" onClick={this.cancel}>
+                            <span className="glyphicon glyphicon-stop"/> Cancel
+                        </button>
+                        <p/>
+                    </div>
+                );
             case "COMPLETED":
-                return this.renderCompleted();
+                return (
+                    <div>
+                        <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
+                        <div className="btn-group">
+                            <button className="btn btn-success" onClick={this.load}>
+                                <span className="glyphicon glyphicon-ok"/> Execute Again
+                            </button>
+                            <button className="btn btn-default" data-toggle="modal" data-target={modalId}>
+                                <span className="text-success glyphicon glyphicon-info-sign"/>
+                            </button>
+                        </div>
+                        <p/>
+                    </div>
+                );
             case "FAILED":
-                return this.renderFailed();
+                return (
+                    <div>
+                        <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
+                        <div className="btn-group">
+                            <button className="btn btn-danger" onClick={this.load}>
+                                <span className="glyphicon glyphicon-remove"/> Execute Again
+                            </button>
+                            <button className="btn btn-default" data-toggle="modal" data-target={modalId}>
+                                <span className="text-danger glyphicon glyphicon-info-sign"/>
+                            </button>
+                        </div>
+                        <p/>
+                    </div>
+                );
             case "STOPPING":
-                return this.renderCancelling();
+                return (
+                    <div>
+                        <button className="btn btn-danger" data-toggle="modal" data-target={modalId}>
+                            <span className="glyphicon glyphicon-stop"/> Stopping...
+                        </button>
+                        <p/>
+                    </div>
+                );
             case "STOPPED":
                 if (this.execution.context.exitCode === "CANCELLED")
-                    return this.renderCancelled();
+                    return (
+                        <div>
+                            <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
+                            <div className="btn-group">
+                                <button className="btn btn-danger" onClick={this.load}>
+                                    <span className="glyphicon glyphicon-remove"/> Execute Again
+                                </button>
+                                <button className="btn btn-default" data-toggle="modal" data-target={modalId}>
+                                    <span className="text-danger glyphicon glyphicon-info-sign"/>
+                                </button>
+                            </div>
+                            <p/>
+                        </div>
+                    );
                 else if (this.execution.context.exitCode === "TIMEOUT")
-                    return this.renderTimedOut();
+                    return (
+                        <div>
+                            <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
+                            <div className="btn-group">
+                                <button className="btn btn-danger" onClick={this.load}>
+                                    <span className="glyphicon glyphicon-remove"/> Execute Again
+                                </button>
+                                <button className="btn btn-default" data-toggle="modal" data-target={modalId}>
+                                    <span className="text-danger glyphicon glyphicon-info-sign"/>
+                                </button>
+                            </div>
+                            <p/>
+                        </div>
+                    );
                 else return this.renderReady();
         }
     }
 
-    renderReady() {
-        return (
-            <div>
-                <div className="input-group">
-                    <input type="text" className="form-control" ref="ttl" placeholder="ttl"/>
-                    <span className="input-group-btn">
-                        <button className="btn btn-info" onClick={this.load}>Go</button>
-                    </span>
+    renderModalReport() {
+
+        if (this.execution == null) {
+            return (
+                <div>
+                    <span className="glyphicon glyphicon-exclamation-sign" /> Task has not been executed yet.
                 </div>
-                <p></p>
+            )
+        }
+
+        console.log("execution for modal:", this.execution);
+
+        return (
+            <div className="row">
+                <div className="container col-sm-12">
+                    <form className="form-horizontal">
+                        <div className="form-group">
+                            <label className="control-label col-sm-2">Status</label>
+                            <div className="col-sm-10">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    disabled
+                                    value={this.execution.context.status}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2">Exit Code</label>
+                            <div className="col-sm-10">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    disabled
+                                    value={this.execution.context.exitCode}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2">Result</label>
+                            <div className="col-sm-10">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    disabled
+                                    value={this.execution.context.result ? this.execution.context.result : ""}
+                                />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
+    renderModal(props) {
+        return (
+            <div id={props.modalId} className="modal fade" role="dialog">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="close" data-dismiss="modal">&times;</button>
+                            <h4 className="modal-title">Execution Info</h4>
+                        </div>
+                        <div className="modal-body">
+                            {props.children}
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
 
-    renderInProgress() {
-        return (
-            <div>
-                <button className="btn btn-info" disabled>Go</button>
-                <button className="btn btn-danger" onClick={this.cancel}>Cancel</button>
-                button>
-                <img className="showInProgress loader" src="/resources/loading.gif" alt="loading"/>
-                <p></p>
-            </div>
-        )
-    }
+    // renderReady() {
+    //     return (
+    //         <div>
+    //             <div className="input-group">
+    //                 <input type="text" className="form-control" ref="ttl" placeholder="ttl"/>
+    //                 <span className="input-group-btn">
+    //                     <button className="btn btn-info" onClick={this.load}>Go</button>
+    //                 </span>
+    //             </div>
+    //             <p></p>
+    //         </div>
+    //     )
+    // }
 
-    renderCompleted() {
-        return (
-            <div>
-                <input type="text" ref="ttl"/>
-                <button className="btn btn-info" onClick={this.load}>Go</button>
-                <p></p>
-                <div className="alert alert-success">Done. Result: {this.execution.context.result.toString()}</div>
-            </div>
-        )
-    }
-
-    renderFailed() {
-        return (
-            <div>
-                <input type="text" ref="ttl"/>
-                <button className="btn btn-info" onClick={this.load}>Go</button>
-                <p></p>
-                <div
-                    className="showOnErrorAlert alert alert-danger">Error: {this.execution.context.result.toString()}</div>
-            </div>
-        )
-    }
-
-    renderCancelling() {
-        return (
-            <div>
-                <p></p>
-                <div className="showOnErrorAlert alert alert-danger">Attempting to cancel...</div>
-            </div>
-        )
-    }
-
-    renderCancelled() {
-        return (
-            <div>
-                <input type="text" ref="ttl"/>
-                <button className="btn btn-info" onClick={this.load}>Go</button>
-                <p></p>
-                <div className="showOnErrorAlert alert alert-danger">Canceled.</div>
-            </div>
-        )
-    }
-
-    renderTimedOut() {
-        return (
-            <div>
-                <input type="text" ref="ttl"/>
-                <button className="btn btn-info" onClick={this.load}>Go</button>
-                <p></p>
-                <div className="showOnErrorAlert alert alert-danger">Timed out.</div>
-            </div>
-        )
-    }
+    // renderInProgress() {
+    //     return (
+    //         <div>
+    //             <button className="btn btn-info" disabled>Go</button>
+    //             <button className="btn btn-danger" onClick={this.cancel}>Cancel</button>
+    //             button>
+    //             <img className="showInProgress loader" src="/resources/loading.gif" alt="loading"/>
+    //             <p></p>
+    //         </div>
+    //     )
+    // }
+    //
+    // renderCompleted() {
+    //     return (
+    //         <div>
+    //             <input type="text" ref="ttl"/>
+    //             <button className="btn btn-info" onClick={this.load}>Go</button>
+    //             <p></p>
+    //             <div className="alert alert-success">Done. Result: {this.execution.context.result.toString()}</div>
+    //         </div>
+    //     )
+    // }
+    //
+    // renderFailed() {
+    //     return (
+    //         <div>
+    //             <input type="text" ref="ttl"/>
+    //             <button className="btn btn-info" onClick={this.load}>Go</button>
+    //             <p></p>
+    //             <div
+    //                 className="showOnErrorAlert alert alert-danger">Error: {this.execution.context.result.toString()}</div>
+    //         </div>
+    //     )
+    // }
+    //
+    // renderCancelling() {
+    //     return (
+    //         <div>
+    //             <p></p>
+    //             <div className="showOnErrorAlert alert alert-danger">Attempting to cancel...</div>
+    //         </div>
+    //     )
+    // }
+    //
+    // renderCancelled() {
+    //     return (
+    //         <div>
+    //             <input type="text" ref="ttl"/>
+    //             <button className="btn btn-info" onClick={this.load}>Go</button>
+    //             <p></p>
+    //             <div className="showOnErrorAlert alert alert-danger">Canceled.</div>
+    //         </div>
+    //     )
+    // }
+    //
+    // renderTimedOut() {
+    //     return (
+    //         <div>
+    //             <input type="text" ref="ttl"/>
+    //             <button className="btn btn-info" onClick={this.load}>Go</button>
+    //             <p></p>
+    //             <div className="showOnErrorAlert alert alert-danger">Timed out.</div>
+    //         </div>
+    //     )
+    // }
 }
 
 $(function () {
