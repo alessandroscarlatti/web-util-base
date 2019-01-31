@@ -102,7 +102,7 @@ class ParamsProvider extends React.Component {
                     <div className="col-sm-10">
                         <ul className="list-inline">
                             <li><a href="#" onClick={this.switchToJsonView}>
-                                <span className="glyphicon glyphicon-pencil"></span> Edit JSON
+                                <span className="fas fa-pencil"></span> Edit JSON
                             </a></li>
                         </ul>
                     </div>
@@ -124,13 +124,13 @@ class ParamsProvider extends React.Component {
                     <div className="col-sm-10">
                         <ul className="list-inline">
                             <li><a href="#" onClick={this.switchToFormView}>
-                                <span className="glyphicon glyphicon-pencil"></span> Edit Form
+                                <span className="fas fa-pencil"></span> Edit Form
                             </a></li>
                         </ul>
                     </div>
                     <div className="form-group">
                         <div className="col-sm-2">
-                            {/*<h4 className="pull-right glyphicon glyphicon-pencil"></h4>*/}
+                            {/*<h4 className="pull-right fas fa-pencil"></h4>*/}
                         </div>
                         <div className="col-sm-10">
                             <textarea

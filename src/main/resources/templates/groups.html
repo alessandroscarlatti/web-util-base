@@ -30,7 +30,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <a href="#" th:href="'/groups/' + ${group.name}">
-                                    <span class="text-info glyphicon glyphicon-th large-glyphicon"/>
+                                    <span class="text-info fas fa-th large-glyphicon"/>
                                     <span th:text="${group.prettyName}">GroupName</span>
                                 </a>
                             </div>
@@ -38,13 +38,16 @@
                     </div>
                 </th:block>
             </div>
+            <div class="row">
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editGroupsModal">Edit Groups
+                </button>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editAllActivitiesModal">Edit
+                    Activities
+                </button>
+            </div>
 
-            <!-- Trigger the modal with a button -->
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editGroupsModal">Edit Groups
-            </button>
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editAllActivitiesModal">Edit
-                Activities
-            </button>
+
 
             <!-- Edit Groups Modal -->
             <div id="editGroupsModal" class="modal fade" role="dialog">

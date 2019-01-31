@@ -116,7 +116,7 @@ class TaskExecutorUi extends React.Component {
         return (
             <div className="row">
                 <button className="btn btn-primary" onClick={this.execute}><span
-                    className="glyphicon glyphicon-play"></span> Execute
+                    className="fas fa-play"></span> Execute
                 </button>
             </div>
         )
@@ -126,7 +126,7 @@ class TaskExecutorUi extends React.Component {
         return (
             <div className="row">
                 <button className="btn btn-primary" onClick={this.execute} disabled><span
-                    className="glyphicon glyphicon-play"></span> Execute
+                    className="fas fa-play"></span> Execute
                 </button>
                 <p></p>
                 <p className="alert"><img style={{height: "33px"}} src="../src/main/resources/static/resources/spinner.gif"/>Working...</p>
@@ -138,7 +138,7 @@ class TaskExecutorUi extends React.Component {
         return (
             <div className="row">
                 <button className="btn btn-primary" onClick={this.execute}><span
-                    className="glyphicon glyphicon-play"></span> Execute
+                    className="fas fa-play"></span> Execute
                 </button>
                 <p></p>
                 <p className="alert alert-success">Completed</p>
@@ -150,7 +150,7 @@ class TaskExecutorUi extends React.Component {
         return (
             <div className="row">
                 <button className="btn btn-primary" onClick={this.execute}><span
-                    className="glyphicon glyphicon-play"></span> Execute
+                    className="fas fa-play"></span> Execute
                 </button>
                 <p></p>
                 <p className="alert alert-danger">Error</p>

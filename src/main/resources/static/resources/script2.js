@@ -299,7 +299,7 @@ class PageLoader extends React.Component {
                     <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
                     <p/>
                     <button className="btn btn-primary" onClick={this.load}>
-                        <span className="glyphicon glyphicon-play"/> Execute
+                        <span className="fas fa-play"/> Execute
                     </button>
                     <p/>
                 </div>
@@ -310,9 +310,8 @@ class PageLoader extends React.Component {
             case "STARTING":
                 return (
                     <div>
-
                         <button className="btn btn-primary" onClick={this.load}>
-                            <span className="glyphicon glyphicon-play"/> Execute
+                            <span className="fas fa-play"/> Execute
                         </button>
                         <p/>
                     </div>
@@ -322,7 +321,7 @@ class PageLoader extends React.Component {
                     <div>
                         <span className="glyphicon" style={loaderGifStyles}/><span>&nbsp;</span>
                         <button className="btn btn-danger" onClick={this.cancel}>
-                            <span className="glyphicon glyphicon-stop"/> Cancel
+                            <span className="fas fa-stop"/> Cancel
                         </button>
                         <p/>
                     </div>
@@ -331,12 +330,13 @@ class PageLoader extends React.Component {
                 return (
                     <div>
                         <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
-                        <div className="btn-group">
+                        <p />
+                        <div>
                             <button className="btn btn-success" onClick={this.load}>
-                                <span className="glyphicon glyphicon-ok"/> Execute Again
+                                <span className="fas fa-ok"/> Execute Again
                             </button>
-                            <button className="btn btn-default" data-toggle="modal" data-target={modalId}>
-                                <span className="text-success glyphicon glyphicon-info-sign"/>
+                            <button className="btn btn-link" data-toggle="modal" data-target={modalId}>
+                                <span className="text-success fas fa-info-circle"/>
                             </button>
                         </div>
                         <p/>
@@ -346,12 +346,13 @@ class PageLoader extends React.Component {
                 return (
                     <div>
                         <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
-                        <div className="btn-group">
+                        <p />
+                        <div>
                             <button className="btn btn-danger" onClick={this.load}>
-                                <span className="glyphicon glyphicon-remove"/> Execute Again
+                                <span className="fas fa-remove"/> Execute Again
                             </button>
-                            <button className="btn btn-default" data-toggle="modal" data-target={modalId}>
-                                <span className="text-danger glyphicon glyphicon-info-sign"/>
+                            <button className="btn btn-link" data-toggle="modal" data-target={modalId}>
+                                <span className="text-danger fas fa-info-circle"/>
                             </button>
                         </div>
                         <p/>
@@ -361,7 +362,7 @@ class PageLoader extends React.Component {
                 return (
                     <div>
                         <button className="btn btn-danger" data-toggle="modal" data-target={modalId}>
-                            <span className="glyphicon glyphicon-stop"/> Stopping...
+                            <span className="fas fa-stop"/> Stopping...
                         </button>
                         <p/>
                     </div>
@@ -371,12 +372,13 @@ class PageLoader extends React.Component {
                     return (
                         <div>
                             <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
-                            <div className="btn-group">
+                            <p />
+                            <div>
                                 <button className="btn btn-danger" onClick={this.load}>
-                                    <span className="glyphicon glyphicon-remove"/> Execute Again
+                                    <span className="fas fa-remove"/> Execute Again
                                 </button>
-                                <button className="btn btn-default" data-toggle="modal" data-target={modalId}>
-                                    <span className="text-danger glyphicon glyphicon-info-sign"/>
+                                <button className="btn btn-link" data-toggle="modal" data-target={modalId}>
+                                    <span className="text-danger fas fa-info-circle"/>
                                 </button>
                             </div>
                             <p/>
@@ -386,12 +388,13 @@ class PageLoader extends React.Component {
                     return (
                         <div>
                             <input className="form-control" type="text" ref="ttl" placeholder="ttl"/>
-                            <div className="btn-group">
+                            <p />
+                            <div>
                                 <button className="btn btn-danger" onClick={this.load}>
-                                    <span className="glyphicon glyphicon-remove"/> Execute Again
+                                    <span className="fas fa-remove"/> Execute Again
                                 </button>
-                                <button className="btn btn-default" data-toggle="modal" data-target={modalId}>
-                                    <span className="text-danger glyphicon glyphicon-info-sign"/>
+                                <button className="btn btn-link" data-toggle="modal" data-target={modalId}>
+                                    <span className="text-danger fas fa-info-circle"/>
                                 </button>
                             </div>
                             <p/>
@@ -406,7 +409,7 @@ class PageLoader extends React.Component {
         if (this.execution == null) {
             return (
                 <div>
-                    <span className="glyphicon glyphicon-exclamation-sign"/> Task has not been executed yet.
+                    <span className="fas fa-exclamation-sign"/> Task has not been executed yet.
                 </div>
             )
         }
@@ -422,7 +425,7 @@ class PageLoader extends React.Component {
                 <div className="container col-sm-12">
                     <form className="form-horizontal">
 
-                        <div className="form-group">
+                        <div className="form-group row">
                             <label className="control-label col-sm-2">Start Time</label>
                             <div className="col-sm-10">
                                 <input
@@ -434,7 +437,7 @@ class PageLoader extends React.Component {
                             </div>
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-group row">
                             <label className="control-label col-sm-2">End Time</label>
                             <div className="col-sm-10">
                                 <input
@@ -446,7 +449,7 @@ class PageLoader extends React.Component {
                             </div>
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-group row">
                             <label className="control-label col-sm-2">Duration (milli)</label>
                             <div className="col-sm-10">
                                 <input
@@ -458,7 +461,7 @@ class PageLoader extends React.Component {
                             </div>
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-group row">
                             <label className="control-label col-sm-2">Parameters</label>
                             <div className="col-sm-10">
                                 <textarea
@@ -472,7 +475,7 @@ class PageLoader extends React.Component {
                             </div>
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-group row">
                             <label className="control-label col-sm-2">Status</label>
                             <div className="col-sm-10">
                                 <input
@@ -484,7 +487,7 @@ class PageLoader extends React.Component {
                             </div>
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-group row">
                             <label className="control-label col-sm-2">Exit Code</label>
                             <div className="col-sm-10">
                                 <input
@@ -496,7 +499,7 @@ class PageLoader extends React.Component {
                             </div>
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-group row">
                             <label className="control-label col-sm-2">Result</label>
                             <div className="col-sm-10">
                                 <textarea
@@ -516,108 +519,37 @@ class PageLoader extends React.Component {
     }
 
     renderModal(props) {
+
+        let infoCircleClassName = "";
+        if (this.execution != null)
+            infoCircleClassName = this.execution.context.status === "COMPLETED" ? "text-success" : "text-danger";
+
         return (
             <div id={props.modalId} className="modal fade" role="dialog">
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal">&times;</button>
                             <h2 className="modal-title">
-                                <span style={this.styles.modalInfoGlyphicon} className="text-info glyphicon glyphicon-info-sign"/>
+                                <span style={this.styles.modalInfoGlyphicon}
+                                      className={`${infoCircleClassName} fas fa-info-circle`}/>
                                 <span> Execution Info</span>
                             </h2>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div className="modal-body">
                             {props.children}
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-outline-default" data-dismiss="modal">Close
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         )
     }
-
-    // renderReady() {
-    //     return (
-    //         <div>
-    //             <div className="input-group">
-    //                 <input type="text" className="form-control" ref="ttl" placeholder="ttl"/>
-    //                 <span className="input-group-btn">
-    //                     <button className="btn btn-info" onClick={this.load}>Go</button>
-    //                 </span>
-    //             </div>
-    //             <p></p>
-    //         </div>
-    //     )
-    // }
-
-    // renderInProgress() {
-    //     return (
-    //         <div>
-    //             <button className="btn btn-info" disabled>Go</button>
-    //             <button className="btn btn-danger" onClick={this.cancel}>Cancel</button>
-    //             button>
-    //             <img className="showInProgress loader" src="/resources/loading.gif" alt="loading"/>
-    //             <p></p>
-    //         </div>
-    //     )
-    // }
-    //
-    // renderCompleted() {
-    //     return (
-    //         <div>
-    //             <input type="text" ref="ttl"/>
-    //             <button className="btn btn-info" onClick={this.load}>Go</button>
-    //             <p></p>
-    //             <div className="alert alert-success">Done. Result: {this.execution.context.result.toString()}</div>
-    //         </div>
-    //     )
-    // }
-    //
-    // renderFailed() {
-    //     return (
-    //         <div>
-    //             <input type="text" ref="ttl"/>
-    //             <button className="btn btn-info" onClick={this.load}>Go</button>
-    //             <p></p>
-    //             <div
-    //                 className="showOnErrorAlert alert alert-danger">Error: {this.execution.context.result.toString()}</div>
-    //         </div>
-    //     )
-    // }
-    //
-    // renderCancelling() {
-    //     return (
-    //         <div>
-    //             <p></p>
-    //             <div className="showOnErrorAlert alert alert-danger">Attempting to cancel...</div>
-    //         </div>
-    //     )
-    // }
-    //
-    // renderCancelled() {
-    //     return (
-    //         <div>
-    //             <input type="text" ref="ttl"/>
-    //             <button className="btn btn-info" onClick={this.load}>Go</button>
-    //             <p></p>
-    //             <div className="showOnErrorAlert alert alert-danger">Canceled.</div>
-    //         </div>
-    //     )
-    // }
-    //
-    // renderTimedOut() {
-    //     return (
-    //         <div>
-    //             <input type="text" ref="ttl"/>
-    //             <button className="btn btn-info" onClick={this.load}>Go</button>
-    //             <p></p>
-    //             <div className="showOnErrorAlert alert alert-danger">Timed out.</div>
-    //         </div>
-    //     )
-    // }
 }
 
 $(function () {
